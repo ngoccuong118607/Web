@@ -9,9 +9,22 @@ import { useNavigate } from 'react-router-dom';
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] =useState(false)
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate()
     const handleNavigateSignUp = () => {
         navigate('/sign-up')
+    }
+
+    const handleOnchangeEmail = (value) => {
+        setEmail(value)
+    }
+    const handleOnchangePassword = (value) => {
+        setPassword(value)
+    }
+
+    const handleSignIn = () => {
+        console.log('sign-in', email, password)
     }
 
     return (
@@ -20,7 +33,7 @@ const SignInPage = () => {
             <WrapperContainerLeft>
                 <h1>Xin chào</h1>
                 <p>Đăng nhập hoặc tạo tài khoản</p>
-                <InputFrom style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" />
+                <InputFrom style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} OnChange={handleOnchangeEmail} />
                 <div style={{ position: "relative" }}>
                     <span
                         onClick={() => setIsShowPassword(!isShowPassword)}
@@ -33,10 +46,16 @@ const SignInPage = () => {
                     >
                         {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
                     </span>
-                    <InputFrom placeholder="password" type={isShowPassword ? "text" : "password"} />
+                    <InputFrom 
+                        placeholder="password" 
+                        type={isShowPassword ? "text" : "password"} 
+                        value={password} 
+                        OnChange={handleOnchangePassword} 
+                    />
                 </div>
                 <ButtonComponent
-                    bordered={false}
+                    disabled={!email.length || !password.length }
+                    onClick={handleSignIn}
                     size={40}
                     styleButton={{
                         height: '48px',

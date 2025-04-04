@@ -1,16 +1,14 @@
-import React from "react";
-import { WrapperInputStyle } from "./style";
+import React from 'react';
+import { WrapperInputStyle } from './style';
 
-const InputFrom = ({ placeholder = "Nhập text", style, value, onChange, ...rests }) => {
+const InputForm = (props) => {
+    const { placeholder = 'Nhập text', ...rests } = props;
+    const handleOnchangeInput = (e) => {
+        props.OnChange(e.target.value)
+    }
     return (
-        <WrapperInputStyle
-            placeholder={placeholder}
-            value={value} // Sử dụng value từ props
-            onChange={onChange} // Sử dụng onChange từ props
-            style={style}
-            {...rests}
-        />
+        <WrapperInputStyle placeholder={placeholder} value={props.value } {...rests} onChange={handleOnchangeInput} />
     );
 };
 
-export default InputFrom;
+export default InputForm;
