@@ -38,3 +38,10 @@ export const WrapperTextHeaderSmall = styled.span`
     font-size: 12px;
     color: #fff;
 `;
+
+export const WrapperContentPopup = styled.p`
+    cursor: pointer;
+    &:hover {
+        color: rgb(26, 148, 255);
+    }
+`

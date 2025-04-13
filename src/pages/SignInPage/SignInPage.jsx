@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from './style'
-import InputFrom from '../../components/InputFrom/InpurFrom'
+import InputForm from '../../components/InputForm/InputForm'
 import imageLogo from '../../assets/images/logo-login.png'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
-import { Image } from 'antd'
+import { Image, message } from 'antd'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as UserService from '../../services/UserService'
 import { useMutationHooks } from '../../hooks/useMutationHook';
 import Loading from '../../components/LoadingComponent/Loading';
-import * as message from '../../components/Message/Message'
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../../redux/slides/UserSlide';
+import { updateUser } from '../../redux/slides/userSlide';
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] =useState(false)
+    const location = useLocation
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate()
@@ -24,27 +24,40 @@ const SignInPage = () => {
     const mutation = useMutationHooks(
         data => UserService.loginUser(data)
     )
-    const {data, isLoading, isSuccess, isError} = mutation
+    const {data, isLoading, isSuccess } = mutation
 
     useEffect(() => {
-        if(isSuccess){
-            navigate('/')
-            console.log('data', data)
-            localStorage.setItem('accessToken', data?.data?.accessToken)
-            if(data?.access_token) {
-                const decoded = jwtDecode(data?.access_token);
-                console.log('decode', decoded);
-                if(decoded?.id) {
-                    handleGetDetailsUser(decoded?.id, data?.access_token)
+        if (isSuccess) {
+            if(location?.state) {
+                navigate(location?.state)
+            }else {
+                navigate('/')
+            }
+            if (data?.status === 'OK') {
+                const accessToken = data?.access_token || data?.data?.accessToken; // Truy cập access_token linh hoạt
+                if (!accessToken) {
+                    console.error('Access token not found in response:', data);
+                    message.error('Không tìm thấy access token!');
+                    return;
                 }
-            } 
+    
+                localStorage.setItem('accessToken', JSON.stringify(accessToken));
+                navigate('/');
+    
+                const decoded = jwtDecode(accessToken);
+                console.log('decode', decoded);
+                if (decoded?.id) {
+                    handleGetDetailsUser(decoded?.id, accessToken);
+                }
+            } else {
+                message.error(data?.message || 'Đăng nhập thất bại!');
+            }
         }
-    }, [isSuccess])
+    }, [isSuccess]);
 
     const handleGetDetailsUser = async (id, token) => {
         const res = await UserService.getDetailsUser(id, token)
         dispatch(updateUser({...res?.data, access_token: token}))
-        console.log('res', res)
     }
 
     console.log('mutation', mutation)
@@ -74,7 +87,7 @@ const SignInPage = () => {
             <WrapperContainerLeft>
                 <h1>Xin chào</h1>
                 <p>Đăng nhập hoặc tạo tài khoản</p>
-                <InputFrom style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
+                <InputForm style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
                 <div style={{ position: "relative" }}>
                     <span
                         onClick={() => setIsShowPassword(!isShowPassword)}
@@ -87,7 +100,7 @@ const SignInPage = () => {
                     >
                         {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
                     </span>
-                    <InputFrom 
+                    <InputForm 
                         placeholder="password" 
                         type={isShowPassword ? "text" : "password"} 
                         value={password} 
@@ -108,7 +121,7 @@ const SignInPage = () => {
                         margin: '26px 0 0px',
                         background: 'rgb(255, 57, 69)' // Thêm thuộc tính background
                     }}
-                    textButton={'Đăng nhập'}
+                    textbutton={'Đăng nhập'}
                     styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
                 ></ButtonComponent>
                 </Loading>

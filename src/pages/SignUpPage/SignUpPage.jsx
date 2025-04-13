@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from './style'
-import InputFrom from '../../components/InputFrom/InpurFrom'
+import InputForm from '../../components/InputForm/InputForm'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import imageLogo from '../../assets/images/logo-login.png'
@@ -61,7 +61,7 @@ const SignUpPage = () => {
                 <WrapperContainerLeft>
                 <h1>Xin chào</h1>
                 <p>Đăng ký và tạo tài khoản</p>
-                <InputFrom style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
+                <InputForm style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
                 <div style={{ position: "relative" }}>
                     <span
                         onClick={() => setIsShowPassword(!isShowPassword)}
@@ -79,7 +79,7 @@ const SignUpPage = () => {
                         )
                     }
                     </span>
-                    <InputFrom placeholder="Password" style={{ marginBottom: '10px' }} type={isShowPassword ? "text" : "password"}
+                    <InputForm placeholder="Password" style={{ marginBottom: '10px' }} type={isShowPassword ? "text" : "password"}
                     value={password} onChange={handleOnchangePassword} />
                 </div>
                 <div style={{ position: "relative" }}>
@@ -100,7 +100,7 @@ const SignUpPage = () => {
                             )
                         }
                     </span>
-                    <InputFrom placeholder="Confirm password" type={isShowConfirmPassword ? "text" : "password"}
+                    <InputForm placeholder="Confirm password" type={isShowConfirmPassword ? "text" : "password"}
                     value={confirmPassword} onChange={handleOnchangeConfirmPassword} 
                     />
                 </div>
@@ -118,7 +118,7 @@ const SignUpPage = () => {
                         borderRadius: '4px',
                         margin: '26px 0 0px'
                     }}
-                    textButton={"Đăng ký"}
+                    textbutton={"Đăng ký"}
                     styleTextButton={{ color: '#fff', fontSize:'15px', fontWeight:'700' }} 
                 ></ButtonComponent>
                 </Loading>

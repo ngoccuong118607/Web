@@ -1,12 +1,13 @@
-import { Spin } from 'antd'
-import React from 'react'
+import React from 'react';
+import { Spin } from 'antd';
 
-const Loading = ({children, isPending, delay = 200}) => {
+const Loading = ({ isLoading, children }) => {
     return (
-        <Spin spinning={isPending} delay ={delay}>
+        <>
+            {isLoading && <Spin size="large" style={{ marginRight: '10px' }} />}
             {children}
-        </Spin>
-    )
-}
+        </>
+    );
+};
 
-export default Loading
+export default Loading;
