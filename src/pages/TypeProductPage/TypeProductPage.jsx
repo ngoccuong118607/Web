@@ -10,6 +10,7 @@ import { useState } from 'react'
 import Loading from '../../components/LoadingComponent/Loading'
 import { useSelector } from 'react-redux'
 import { useDebounce } from '../../hooks/useDebounce'
+import FooterComponent from "../../components/FooterComponent/FooterComponent"; 
 
 const TypeProductPage = () => {
     const searchProduct = useSelector((state) => state?.product?.search)
@@ -46,23 +47,23 @@ const TypeProductPage = () => {
         setPanigate({...panigate, page: current - 1, limit: pageSize})    
     }
     return (
-        <Loading isLoading={loading}>
-            <div style={{ width: '100%', background: '#efefef', height: 'calc(100vh - 64px)' }}>
-                <div style={{ width: '1270px', margin: '0 auto', height: '100%' }}>
-                    <Row style={{ flexWrap: 'nowrap', paddingTop: '10px',height: 'calc(100% - 20px)' }}>
-                        <WrapperNavbar span={4} >
-                            <NavBarComponent />
-                        </WrapperNavbar>
-                        <Col span={20} style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-                            <WrapperProducts >
-                                {products?.filter((pro) => {
-                                    if(searchDebounce === '') {
-                                        return pro
-                                    }else if(pro?.name?.toLowerCase()?.includes(searchDebounce?.toLowerCase())) {
-                                        return pro
-                                    }
-                                })?.map((product) => {
-                                    return (
+        <>
+            <Loading isLoading={loading}>
+                <div style={{ width: '100%', background: '#efefef', height: 'calc(100vh - 64px)' }}>
+                    <div style={{ width: '1270px', margin: '0 auto', height: '100%' }}>
+                        <Row style={{ flexWrap: 'nowrap', paddingTop: '10px', height: 'calc(100% - 20px)' }}>
+                            <WrapperNavbar span={4}>
+                                <NavBarComponent />
+                            </WrapperNavbar>
+                            <Col span={20} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                <WrapperProducts>
+                                    {products?.filter((pro) => {
+                                        if (searchDebounce === '') {
+                                            return pro
+                                        } else if (pro?.name?.toLowerCase()?.includes(searchDebounce?.toLowerCase())) {
+                                            return pro
+                                        }
+                                    })?.map((product) => (
                                         <CardComponent
                                             key={product._id}
                                             countInStock={product.countInStock}
@@ -76,15 +77,21 @@ const TypeProductPage = () => {
                                             discount={product.discount}
                                             id={product._id}
                                         />
-                                    )
-                                })}
-                            </WrapperProducts>
-                            <Pagination defaultCurrent={panigate.page + 1} total={panigate?.total} onChange={onChange} style={{ textAlign: 'center', marginTop: '10px' }} />
-                        </Col>
-                    </Row>
+                                    ))}
+                                </WrapperProducts>
+                                <Pagination
+                                    defaultCurrent={panigate.page + 1}
+                                    total={panigate?.total}
+                                    onChange={onChange}
+                                    style={{ textAlign: 'center', marginTop: '10px' }}
+                                />
+                            </Col>
+                        </Row>
+                    </div>
                 </div>
-            </div>
-        </Loading>
+            </Loading>
+            <FooterComponent />
+        </>
     )
 }
 
